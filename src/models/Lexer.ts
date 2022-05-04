@@ -1,5 +1,5 @@
 import { LexerError, LexerErrors } from "./LexerError";
-import { Token, TokenType } from "./Token";
+import { KeywordType, SymbolType, Token, TokenType } from "./Token";
 
 const STARTING_DIGITS: string[] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 const DIGITS: string[] = [...STARTING_DIGITS, '.'];
@@ -111,11 +111,9 @@ export class Lexer
       this.advance();
     }
 
-    let type: string = TokenType.IDENTIFIER;
+    if(KEYWORDS.includes(str)) return new Token(TokenType.KEYWORD, str, this.getKeywordType(str));
 
-    if(KEYWORDS.includes(str)) type = TokenType.KEYWORD;
-
-    return new Token(type, str);
+    return new Token(TokenType.IDENTIFIER, str);
   }
 
   private makeSymbol(): Token
@@ -127,10 +125,10 @@ export class Lexer
       str = str + this.currentChar;
       this.advance();
       
-      if(COMPOUND_SYMBOLS.includes(str)) return new Token(TokenType.COMPOUND_SYMBOL, str);      
+      if(COMPOUND_SYMBOLS.includes(str)) return new Token(TokenType.COMPOUND_SYMBOL, str, this.getSymbolSubType(str));      
     }
 
-    return new Token(TokenType.SYMBOL, str);
+    return new Token(TokenType.SYMBOL, str, this.getSymbolSubType(str));
   }
 
   private makeString(): Token
@@ -157,6 +155,57 @@ export class Lexer
     if(this.currentChar === STRING_INIT_SYMBOL) this.advance();
 
     return new Token(TokenType.STRING, str);
+  }
+
+  private getSymbolSubType(symbol: string): string | null
+  {
+    switch(symbol)
+    {
+      case '-': return SymbolType.MINUS;
+      case '+': return SymbolType.PLUS;
+      case '*': return SymbolType.MULTIPLY;
+      case '/': return SymbolType.DIVIDE;
+      case ';': return SymbolType.SEMICOLON;
+      case '{': return SymbolType.LEFT_BRACE;
+      case '}': return SymbolType.RIGHT_BRACE;
+      case '(': return SymbolType.LEFT_PARENTHESES;
+      case ')': return SymbolType.RIGHT_PARENTHESES;
+      case '"': return SymbolType.DOUBLE_QUOTES;
+      case '=': return SymbolType.ATTRIBUTION;
+      case '|': return SymbolType.VERTICAL_LINE;
+      case '&': return SymbolType.AMPERSAND;
+      case '%': return SymbolType.PERCENTAGE;
+      case '!': return SymbolType.EXCLAMATION;
+
+      case '==': return SymbolType.EQUALS;
+      case '!=': return SymbolType.NOT_EQUALS;
+      case '<=': return SymbolType.LESS_OR_EQUALS_TO;
+      case '>=': return SymbolType.MORE_OR_EQUALS_TO;
+      case '||': return SymbolType.OR;
+      case '&&': return SymbolType.AND;
+      case '++': return SymbolType.INCREMENT;
+      case '--': return SymbolType.DECREMENT;
+
+      default: return null;
+    }
+  }
+
+  private getKeywordType(keyword: string): string | null
+  {
+    switch(keyword)
+    {
+      case 'break': return KeywordType.BREAK;
+      case 'return': return KeywordType.RETURN;
+      case 'continue': return KeywordType.CONTINUE;
+      case 'for': return KeywordType.FOR;
+      case 'while': return KeywordType.WHILE;
+      case 'var': return KeywordType.VAR;
+      case 'const': return KeywordType.CONST;
+      case 'if': return KeywordType.IF;
+      case 'else': return KeywordType.ELSE;
+      case 'elseif': return KeywordType.ELSEIF;
+      default: return null;
+    }
   }
 
   private error(type: string, message: string): void
