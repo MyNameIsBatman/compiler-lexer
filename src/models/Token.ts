@@ -1,8 +1,8 @@
 export class Token
 {
   type: string;
-  subType: string;
   value: any;
+  subType?: string;
 
   constructor(type: string, value: any, subType?: string)
   {
