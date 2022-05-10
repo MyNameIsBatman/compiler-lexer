@@ -1,13 +1,13 @@
 export class Token
 {
-  type: string;
   value: any;
+  type: string;
   subType?: string | null;
 
   constructor(type: string, value: any, subType?: string | null)
   {
-    this.type = type;
     this.value = value;
+    this.type = type;
     this.subType = subType || null;
   }
 }
@@ -42,7 +42,8 @@ export class SymbolType
   public static readonly EXCLAMATION: string = 'SYMBOL_EXCLAMATION';
 
   public static readonly EQUALS: string = 'SYMBOL_EQUALS';
-  public static readonly NOT_EQUALS: string = 'SYMBOL_NOT_EQUALS';
+  public static readonly EXACTLY_EQUALS: string = 'SYMBOL_EXACTLY_EQUALS';
+  public static readonly NOT_EQUAL: string = 'SYMBOL_NOT_EQUAL';
   public static readonly LESS_OR_EQUALS_TO: string = 'SYMBOL_LESS_OR_EQUALS_TO';
   public static readonly MORE_OR_EQUALS_TO: string = 'SYMBOL_MORE_OR_EQUALS_TO';
   public static readonly OR: string = 'SYMBOL_OR';

@@ -1,3 +1,4 @@
+import { threadId } from "worker_threads";
 import { LexerError, LexerErrors } from "./LexerError";
 import { KeywordType, SymbolType, Token, TokenType } from "./Token";
 
@@ -8,11 +9,15 @@ const STARTING_CHARS: string[] = ['a','b','c','d','e','f','g','h','i','j','k','l
 const CHARS: string[] = [...STARTING_CHARS, ...STARTING_DIGITS, '_'];
 
 const STRING_INIT_SYMBOL: string = '"';
+const STRING_STOP_SYMBOL: string = '"';
+const COMMENT_INIT_SYMBOL: string = '//';
+const COMMENT_STOP_SYMBOL: string = '\n';
+
 const SYMBOLS: string[] = ['\'', '*', '-', '+', '/', ';', '{', '}', '(', ')', '=', '|', '&', '%', '!', '<', '>'];
-const COMPOUND_SYMBOLS: string[] = [ '--', '++', '==', '!=', '<=', '>=', '||', '&&'];
+const COMPOUND_SYMBOLS: string[] = [ '--', '++', '==', '===', '!=', '<=', '>=', '||', '&&'];
 
 const KEYWORDS: string[] = ['break','return','continue','for','while', 'var', 'const', 'if', 'else', 'elseif'];
-const IGNORED_TOKENS: string[] = ['\n', '\t', ' '];
+const IGNORED_TOKENS: string[] = ['\n', '\t', '\r', ' '];
 
 export class Lexer
 {
@@ -42,6 +47,12 @@ export class Lexer
     this.advance();
     while(this.currentChar)
     {
+      if(COMMENT_INIT_SYMBOL.startsWith(this.currentChar))
+      {
+        this.makeComment();
+        continue;
+      }
+
       if(IGNORED_TOKENS.includes(this.currentChar))
       {
         this.advance();
@@ -62,7 +73,7 @@ export class Lexer
 
       if(SYMBOLS.includes(this.currentChar))
       {
-        tokens.push(this.makeSymbol());
+        tokens.push(...this.makeSymbol());
         continue;
       }
 
@@ -101,6 +112,20 @@ export class Lexer
     return new Token(TokenType.FLOAT, parseFloat(numberStr))
   }
 
+  private makeComment(): void
+  {
+    this.advance();
+
+    while(this.currentChar)
+    {
+      if(this.currentChar === COMMENT_STOP_SYMBOL) break;
+
+      this.advance();
+    }
+
+    if(this.currentChar === COMMENT_STOP_SYMBOL) this.advance();
+  }
+
   private makeIdentifier(): Token
   {
     let str: string = '';
@@ -116,21 +141,6 @@ export class Lexer
     return new Token(TokenType.IDENTIFIER, str);
   }
 
-  private makeSymbol(): Token
-  {
-    let str: string = '';
-
-    while(this.currentChar && SYMBOLS.includes(this.currentChar))
-    {
-      str = str + this.currentChar;
-      this.advance();
-      
-      if(COMPOUND_SYMBOLS.includes(str)) return new Token(TokenType.COMPOUND_SYMBOL, str, this.getSymbolSubType(str));      
-    }
-
-    return new Token(TokenType.SYMBOL, str, this.getSymbolSubType(str));
-  }
-
   private makeString(): Token
   {
     let str: string = '';
@@ -140,7 +150,7 @@ export class Lexer
 
     while(this.currentChar)
     {
-      if(this.currentChar === STRING_INIT_SYMBOL)
+      if(this.currentChar === STRING_STOP_SYMBOL)
       {
         closedStr = true;
         break;
@@ -152,9 +162,35 @@ export class Lexer
 
     if(!closedStr) this.error(LexerErrors.NOT_CLOSED_STRING, `At position ${this.currentPosition}`);
 
-    if(this.currentChar === STRING_INIT_SYMBOL) this.advance();
+    if(this.currentChar === STRING_STOP_SYMBOL) this.advance();
 
     return new Token(TokenType.STRING, str);
+  }
+
+  private makeSymbol(): Token[]
+  {
+    let str: string = '';
+
+    while(this.currentChar && SYMBOLS.includes(this.currentChar))
+    {
+      const filter: string[] = COMPOUND_SYMBOLS.filter(s => s.startsWith(str));
+
+      if(filter.length === 1 && filter[0] === str) break;
+
+      str = str + this.currentChar;
+
+      this.advance();
+    }
+
+    if(COMPOUND_SYMBOLS.includes(str))
+      return [new Token(TokenType.COMPOUND_SYMBOL, str, this.getSymbolSubType(str))];
+
+    const tokens: Token[] = [];
+
+    for(const symbol of str.split(''))
+      tokens.push(new Token(TokenType.SYMBOL, symbol, this.getSymbolSubType(symbol)));
+    
+    return tokens;
   }
 
   private getSymbolSubType(symbol: string): string | null
@@ -178,7 +214,8 @@ export class Lexer
       case '!': return SymbolType.EXCLAMATION;
 
       case '==': return SymbolType.EQUALS;
-      case '!=': return SymbolType.NOT_EQUALS;
+      case '===': return SymbolType.EXACTLY_EQUALS;
+      case '!=': return SymbolType.NOT_EQUAL;
       case '<=': return SymbolType.LESS_OR_EQUALS_TO;
       case '>=': return SymbolType.MORE_OR_EQUALS_TO;
       case '||': return SymbolType.OR;

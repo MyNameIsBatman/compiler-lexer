@@ -1,8 +1,20 @@
 import { Lexer } from "./models/Lexer";
 import { Token } from "./models/Token";
+import fs from 'fs';
+import path from 'path';
 
-const code: string = '{const abc=1345.65;var vfd="meu email é 1800935@escolas.anchieta.br";if(abc === 1) abc++; else abc--;}';
-const lexer: Lexer = new Lexer(code);
-const tokens: Token[] = lexer.findTokens();
+const FILENAME: string = 'examples/teste.txt';
 
-console.log(JSON.stringify(tokens));
+const filePath: string = path.join(__dirname, FILENAME);
+
+fs.readFile(filePath, {encoding: 'utf-8'}, (err, data) => {
+  if(!err) {
+    const lexer: Lexer = new Lexer(data);
+    const tokens: Token[] = lexer.findTokens();
+    
+    console.table(tokens);
+  } else {
+    console.error(err);
+  }
+});
+
