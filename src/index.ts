@@ -3,7 +3,7 @@ import { Token } from "./models/Token";
 import fs from 'fs';
 import path from 'path';
 
-const FILENAME: string = 'examples/teste.txt';
+const FILENAME: string = 'examples/SomaDoisNumeros.txt';
 
 const filePath: string = path.join(__dirname, FILENAME);
 

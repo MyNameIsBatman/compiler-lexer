@@ -1,4 +1,3 @@
-import { threadId } from "worker_threads";
 import { LexerError, LexerErrors } from "./LexerError";
 import { KeywordType, SymbolType, Token, TokenType } from "./Token";
 
@@ -16,7 +15,7 @@ const COMMENT_STOP_SYMBOL: string = '\n';
 const SYMBOLS: string[] = ['\'', '*', '-', '+', '/', ';', '{', '}', '(', ')', '=', '|', '&', '%', '!', '<', '>'];
 const COMPOUND_SYMBOLS: string[] = [ '--', '++', '==', '===', '!=', '<=', '>=', '||', '&&'];
 
-const KEYWORDS: string[] = ['break','return','continue','for','while', 'var', 'const', 'if', 'else', 'elseif'];
+const KEYWORDS: string[] = ['break','return','continue','for','while', 'var', 'const', 'if', 'else', 'elseif', 'print', 'read'];
 const IGNORED_TOKENS: string[] = ['\n', '\t', '\r', ' '];
 
 export class Lexer

@@ -64,4 +64,6 @@ export class KeywordType
   public static readonly IF: string = 'KEYWORD_IF';
   public static readonly ELSE: string = 'KEYWORD_ELSE';
   public static readonly ELSEIF: string = 'KEYWORD_ELSEIF';
+  public static readonly PRINT: string = 'KEYWORD_PRINT';
+  public static readonly READ: string = 'KEYWORD_READ';
 }
