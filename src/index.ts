@@ -1,9 +1,9 @@
-import { Lexer } from "./models/Lexer";
-import { Token } from "./models/Token";
+import { Lexer } from "./lexer/Lexer";
+import { Token } from "./lexer/Token";
 import fs from 'fs';
 import path from 'path';
 
-const FILENAME: string = 'examples/SomaDoisNumeros.txt';
+const FILENAME: string = '_examples/SomaDoisNumeros.txt';
 
 const filePath: string = path.join(__dirname, FILENAME);
 

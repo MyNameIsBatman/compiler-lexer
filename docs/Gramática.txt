@@ -1,0 +1,3 @@
+Expressão   : termo ((MAIS/MENOS) termo)*
+Termo       : fator ((MULTIPLICAR/DIVIDIR) fator)*
+Fator       : INT|FLOAT

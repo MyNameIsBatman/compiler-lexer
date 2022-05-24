@@ -1,0 +1,9 @@
+{
+  //Primeiro comentário awuiiiii
+  const abc= 1345.65;var vfd="meu email é 1800935@escolas.anchieta.br";
+  if(abc === 1) abc++;
+  else abc--;
+  const finalSum = abc*2;
+
+  //Segundo comentário aqui!!!!
+}
