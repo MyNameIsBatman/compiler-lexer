@@ -12,7 +12,7 @@ const STRING_STOP_SYMBOL: string = '"';
 const COMMENT_INIT_SYMBOL: string = '//';
 const COMMENT_STOP_SYMBOL: string = '\n';
 
-const SYMBOLS: string[] = ['\'', '*', '-', '+', '/', ';', '{', '}', '(', ')', '=', '|', '&', '%', '!', '<', '>'];
+const SYMBOLS: string[] = ['\'', '*', '-', '+', '/', ';', '{', '}', '(', ')', '=', '|', '&', '%', '!', '<', '>', '^'];
 const COMPOUND_SYMBOLS: string[] = [ '--', '++', '==', '===', '!=', '<=', '>=', '||', '&&'];
 
 const KEYWORDS: string[] = ['break','return','continue','for','while', 'var', 'const', 'if', 'else', 'elseif', 'print', 'read'];
@@ -84,6 +84,8 @@ export class Lexer
 
       this.error(LexerErrors.ILLEGAL_CHAR, `${this.currentChar} at position ${this.currentPosition}`);
     }
+
+    tokens.push(new Token(TokenType.END_OF_FILE, null));
 
     return tokens;
   }
@@ -211,6 +213,7 @@ export class Lexer
       case '&': return SymbolType.AMPERSAND;
       case '%': return SymbolType.PERCENTAGE;
       case '!': return SymbolType.EXCLAMATION;
+      case '^': return SymbolType.POWER;
 
       case '==': return SymbolType.EQUALS;
       case '===': return SymbolType.EXACTLY_EQUALS;

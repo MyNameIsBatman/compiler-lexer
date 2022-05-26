@@ -1,3 +1,12 @@
-Expressão   : termo ((MAIS/MENOS) termo)*
-Termo       : fator ((MULTIPLICAR/DIVIDIR) fator)*
-Fator       : INT|FLOAT
+expressao   : VAR|CONST IDENTIFIER EQ expressao
+            : termo ((MAIS|MENOS) termo)*
+
+termo       : fator ((MULTIPLICAR|DIVIDIR) fator)*
+
+fator       : (MAIS|MENOS) fator
+            : power
+
+power       : atom (POWER fator)*
+
+atom        : INT|FLOAT|IDENTIFIER
+            : LEFT_PARETENSYS fator RIGHT_PARENTESYS

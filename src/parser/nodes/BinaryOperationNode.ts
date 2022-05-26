@@ -1,14 +1,22 @@
 import { Token } from "../../lexer/Token";
-import { ParserNode } from "./Node";
+import { ParserNode } from "./ParserNode";
 
-export class BinaryOperationNode
+export class BinaryOperationNode extends ParserNode
 {
   leftNode: ParserNode;
   operationToken: Token;
   rightNode: ParserNode;
 
-  public toString(): string
+  constructor(leftNode: ParserNode, operationToken: Token, rightNode: ParserNode)
   {
-    return `(${this.leftNode.toString()}, ${this.operationToken.value}, ${this.rightNode.toString()})`;
+    super();
+    this.leftNode = leftNode;
+    this.operationToken = operationToken;
+    this.rightNode = rightNode;
+  }
+
+  public getRepresentation(): string
+  {
+    return `BinaryOperation: (${this.leftNode.getRepresentation()}, ${this.operationToken.value}, ${this.rightNode.getRepresentation()})`;
   }
 }
