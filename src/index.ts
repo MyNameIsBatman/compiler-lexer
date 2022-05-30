@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { Parser } from "./parser/Parser";
 
-const FILENAME: string = '_examples/somaso.txt';
+const FILENAME: string = '_examples/SomaDoisNumeros.txt';
 
 const filePath: string = path.join(__dirname, FILENAME);
 
