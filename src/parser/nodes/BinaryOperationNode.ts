@@ -17,6 +17,6 @@ export class BinaryOperationNode extends ParserNode
 
   public get representation(): string
   {
-    return `BinaryOperation: (${this.leftNode.representation}, ${this.operationToken.value}, ${this.rightNode.representation})`;
+    return `BinaryOperation: (${this.leftNode.representation}, ${this.operationToken.value}, ${this.rightNode.representation})\n`;
   }
 }

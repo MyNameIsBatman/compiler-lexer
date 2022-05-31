@@ -18,6 +18,6 @@ export class CallingNode extends ParserNode
 
     for(const argument of this.argumentsNodes) argumentsReps.push(argument.representation);
 
-    return `Call: ${this.identifierNode.representation}(${argumentsReps.join(',')})`;
+    return `Call: ${this.identifierNode.representation}(${argumentsReps.join(',')})\n`;
   }
 }

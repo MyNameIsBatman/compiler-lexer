@@ -49,6 +49,8 @@ export class SymbolType
   public static readonly EXCLAMATION: string = 'SYMBOL_EXCLAMATION';
   public static readonly POWER: string = 'SYMBOL_POWER';
   public static readonly COMMA: string = 'SYMBOL_COMMA';
+  public static readonly MORE_THAN: string = 'SYMBOL_MORE_THAN';
+  public static readonly LESS_THAN: string = 'SYMBOL_LESS_THAN';
 
   public static readonly EQUALS: string = 'SYMBOL_EQUALS';
   public static readonly EXACTLY_EQUALS: string = 'SYMBOL_EXACTLY_EQUALS';
@@ -67,9 +69,12 @@ export class KeywordType
   public static readonly RETURN: string = 'KEYWORD_RETURN';
   public static readonly CONTINUE: string = 'KEYWORD_CONTINUE';
   public static readonly FOR: string = 'KEYWORD_FOR';
+  public static readonly TO: string = 'KEYWORD_TO';
+  public static readonly STEP: string = 'KEYWORD_STEP';
   public static readonly WHILE: string = 'KEYWORD_WHILE';
   public static readonly VAR: string = 'KEYWORD_VAR';
   public static readonly CONST: string = 'KEYWORD_CONST';
+  public static readonly FUNCTION: string = 'KEYWORD_FUNCTION';
   public static readonly IF: string = 'KEYWORD_IF';
   public static readonly ELSE: string = 'KEYWORD_ELSE';
   public static readonly ELSEIF: string = 'KEYWORD_ELSEIF';

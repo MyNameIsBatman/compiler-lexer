@@ -15,6 +15,6 @@ export class VariableAssignementNode extends ParserNode
 
   public get representation(): string
   {
-    return `VariableAssignement: (${this.variableToken.value}, ${this.node.representation})`;
+    return `VariableAssignement: (${this.variableToken.value}, ${this.node.representation})\n`;
   }
 }

@@ -15,6 +15,6 @@ export class UnaryOperationNode extends ParserNode
 
   public get representation(): string
   {
-    return `UnaryOperation: (${this.operationToken.value}, ${this.node.representation})`;
+    return `UnaryOperation: (${this.operationToken.value}, ${this.node.representation})\n`;
   }
 }

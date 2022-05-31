@@ -1,3 +1,0 @@
-var valor1 = 10 * 5 + (-40)
-var valor2 = 0
-funcs("abc")

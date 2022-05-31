@@ -10,12 +10,13 @@ const CHARS: string[] = [...STARTING_CHARS, ...STARTING_DIGITS, '_'];
 const STRING_INIT_SYMBOL: string = '"';
 const STRING_STOP_SYMBOL: string = '"';
 const COMMENT_INIT_SYMBOL: string = '//';
+const COMMENT_STOP_SYMBOL: string = ''
 const END_OF_LINE_SYMBOL: string = '\n';
 
 const SYMBOLS: string[] = ['\'', '*', '-', '+', '/', ';', '{', '}', '(', ')', '=', '|', '&', '%', '!', '<', '>', '^'];
 const COMPOUND_SYMBOLS: string[] = [ '--', '++', '==', '===', '!=', '<=', '>=', '||', '&&'];
 
-const KEYWORDS: string[] = ['break','return','continue','for','while', 'var', 'const', 'if', 'else', 'elseif'];
+const KEYWORDS: string[] = ['break','return','continue','for', 'to', 'step', 'while', 'var', 'const', 'function', 'if', 'else', 'elseif'];
 const IGNORED_TOKENS: string[] = ['\t', '\r', ' '];
 
 export class Lexer
@@ -216,6 +217,8 @@ export class Lexer
       case '!': return SymbolType.EXCLAMATION;
       case '^': return SymbolType.POWER;
       case ',': return SymbolType.COMMA;
+      case '>': return SymbolType.MORE_THAN;
+      case '<': return SymbolType.LESS_THAN;
 
       case '==': return SymbolType.EQUALS;
       case '===': return SymbolType.EXACTLY_EQUALS;
@@ -239,9 +242,12 @@ export class Lexer
       case 'return': return KeywordType.RETURN;
       case 'continue': return KeywordType.CONTINUE;
       case 'for': return KeywordType.FOR;
+      case 'to': return KeywordType.TO;
+      case 'step': return KeywordType.STEP;
       case 'while': return KeywordType.WHILE;
       case 'var': return KeywordType.VAR;
       case 'const': return KeywordType.CONST;
+      case 'function': return KeywordType.FUNCTION;
       case 'if': return KeywordType.IF;
       case 'else': return KeywordType.ELSE;
       case 'elseif': return KeywordType.ELSEIF;

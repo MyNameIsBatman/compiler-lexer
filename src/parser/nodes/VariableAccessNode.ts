@@ -13,6 +13,6 @@ export class VariableAccessNode extends ParserNode
 
   public get representation(): string
   {
-    return `VariableAccess: ${this.variableToken.value}`;
+    return `VariableAccess: ${this.variableToken.value}\n`;
   }
 }

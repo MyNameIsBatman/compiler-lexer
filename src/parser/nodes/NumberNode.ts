@@ -13,6 +13,6 @@ export class NumberNode extends ParserNode
 
   public get representation(): string
   {
-    return `Number: ${this.token.value}`;
+    return `Number: ${this.token.value}\n`;
   }
 }

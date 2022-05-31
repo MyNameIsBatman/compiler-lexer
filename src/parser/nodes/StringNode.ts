@@ -13,6 +13,6 @@ export class StringNode extends ParserNode
 
   public get representation(): string
   {
-    return `String: "${this.token.value}"`;
+    return `String: "${this.token.value}"\n`;
   }
 }
