@@ -1,6 +1,6 @@
 export class ParserNode
 {
-  public getRepresentation(): string
+  public get representation(): string
   {
     return '';
   }

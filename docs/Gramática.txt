@@ -1,3 +1,7 @@
+programa    : declaração*
+
+declaração  : expressao (EOL|EOF)
+
 expressao   : VAR|CONST IDENTIFIER EQ expressao
             : termo ((MAIS|MENOS) termo)*
 
@@ -6,7 +10,14 @@ termo       : fator ((MULTIPLICAR|DIVIDIR) fator)*
 fator       : (MAIS|MENOS) fator
             : power
 
-power       : atom (POWER fator)*
+power       : call (POWER fator)*
 
-atom        : INT|FLOAT|IDENTIFIER
-            : LEFT_PARETENSYS fator RIGHT_PARENTESYS
+call        : atom (LPAREN (expressão (COMMA expressão)*)? RPAREN)?
+
+atom        : INT|FLOAT|STRING|IDENTIFIER
+            : LPAREN expressão RPAREN
+            : expressão_if
+
+expressão_if: IF LPAREN expressão RPAREN LBRACE expressão RBRACE
+                (ELSEIF LPAREN expressão RPAREN LBRACE expressão RBRACE)*
+                (ELSE expressão)?

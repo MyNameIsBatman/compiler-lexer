@@ -13,8 +13,8 @@ export class UnaryOperationNode extends ParserNode
     this.node = node;
   }
 
-  public getRepresentation(): string
+  public get representation(): string
   {
-    return `UnaryOperation: (${this.operationToken.value}, ${this.node.getRepresentation()})`;
+    return `UnaryOperation: (${this.operationToken.value}, ${this.node.representation})`;
   }
 }

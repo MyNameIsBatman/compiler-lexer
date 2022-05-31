@@ -26,6 +26,7 @@ export class TokenType
   public static readonly FLOAT: string = 'FLOAT';
   public static readonly STRING: string = 'STRING';
   public static readonly IDENTIFIER: string = 'IDENTIFIER';
+  public static readonly END_OF_LINE: string = 'EOL';
   public static readonly END_OF_FILE: string = 'EOF';
 }
 
@@ -47,6 +48,7 @@ export class SymbolType
   public static readonly PERCENTAGE: string = 'SYMBOL_PERCENTAGE';
   public static readonly EXCLAMATION: string = 'SYMBOL_EXCLAMATION';
   public static readonly POWER: string = 'SYMBOL_POWER';
+  public static readonly COMMA: string = 'SYMBOL_COMMA';
 
   public static readonly EQUALS: string = 'SYMBOL_EQUALS';
   public static readonly EXACTLY_EQUALS: string = 'SYMBOL_EXACTLY_EQUALS';
@@ -71,6 +73,4 @@ export class KeywordType
   public static readonly IF: string = 'KEYWORD_IF';
   public static readonly ELSE: string = 'KEYWORD_ELSE';
   public static readonly ELSEIF: string = 'KEYWORD_ELSEIF';
-  public static readonly PRINT: string = 'KEYWORD_PRINT';
-  public static readonly READ: string = 'KEYWORD_READ';
 }

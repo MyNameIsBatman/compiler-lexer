@@ -10,13 +10,13 @@ const CHARS: string[] = [...STARTING_CHARS, ...STARTING_DIGITS, '_'];
 const STRING_INIT_SYMBOL: string = '"';
 const STRING_STOP_SYMBOL: string = '"';
 const COMMENT_INIT_SYMBOL: string = '//';
-const COMMENT_STOP_SYMBOL: string = '\n';
+const END_OF_LINE_SYMBOL: string = '\n';
 
 const SYMBOLS: string[] = ['\'', '*', '-', '+', '/', ';', '{', '}', '(', ')', '=', '|', '&', '%', '!', '<', '>', '^'];
 const COMPOUND_SYMBOLS: string[] = [ '--', '++', '==', '===', '!=', '<=', '>=', '||', '&&'];
 
-const KEYWORDS: string[] = ['break','return','continue','for','while', 'var', 'const', 'if', 'else', 'elseif', 'print', 'read'];
-const IGNORED_TOKENS: string[] = ['\n', '\t', '\r', ' '];
+const KEYWORDS: string[] = ['break','return','continue','for','while', 'var', 'const', 'if', 'else', 'elseif'];
+const IGNORED_TOKENS: string[] = ['\t', '\r', ' '];
 
 export class Lexer
 {
@@ -49,6 +49,13 @@ export class Lexer
       if(COMMENT_INIT_SYMBOL.startsWith(this.currentChar))
       {
         this.makeComment();
+        continue;
+      }
+
+      if(END_OF_LINE_SYMBOL === this.currentChar)
+      {
+        tokens.push(new Token(TokenType.END_OF_LINE, null));
+        this.advance();
         continue;
       }
 
@@ -115,16 +122,10 @@ export class Lexer
 
   private makeComment(): void
   {
-    this.advance();
-
-    while(this.currentChar)
+    do
     {
-      if(this.currentChar === COMMENT_STOP_SYMBOL) break;
-
       this.advance();
-    }
-
-    if(this.currentChar === COMMENT_STOP_SYMBOL) this.advance();
+    } while(this.currentChar && this.currentChar !== END_OF_LINE_SYMBOL);
   }
 
   private makeIdentifier(): Token
@@ -214,6 +215,7 @@ export class Lexer
       case '%': return SymbolType.PERCENTAGE;
       case '!': return SymbolType.EXCLAMATION;
       case '^': return SymbolType.POWER;
+      case ',': return SymbolType.COMMA;
 
       case '==': return SymbolType.EQUALS;
       case '===': return SymbolType.EXACTLY_EQUALS;

@@ -11,7 +11,7 @@ export class NumberNode extends ParserNode
     this.token = token;
   }
 
-  public getRepresentation(): string
+  public get representation(): string
   {
     return `Number: ${this.token.value}`;
   }

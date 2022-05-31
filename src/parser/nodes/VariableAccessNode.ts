@@ -11,7 +11,7 @@ export class VariableAccessNode extends ParserNode
     this.variableToken = variableToken;
   }
 
-  public getRepresentation(): string
+  public get representation(): string
   {
     return `VariableAccess: ${this.variableToken.value}`;
   }

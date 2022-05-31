@@ -1,5 +1,6 @@
 import { VariableAccessNode } from './nodes/VariableAccessNode';
-import { ParserResult } from './ParserResult';
+import { CallingNode } from './nodes/CallingNode';
+import { StringNode } from './nodes/StringNode';
 import { ParserError, ParserErrors } from './ParserError';
 import { UnaryOperationNode } from './nodes/UnaryOperationNode';
 import { ParserNode } from './nodes/ParserNode';
@@ -10,7 +11,8 @@ import { VariableAssignementNode } from './nodes/VariableAssignementNode';
 
 //BY PRIORITY
 const ATOMS: string[][] = [
-  [TokenType.INTEGER, TokenType.FLOAT]
+  [TokenType.INTEGER, TokenType.FLOAT],
+  [TokenType.STRING]
 ];
 
 const FACTORS: string[][] = [
@@ -47,9 +49,21 @@ export class Parser
   public buildTree(): void
   {
     this.advance();
-    const result = this.makeExpression();
+    const result = this.makeProgram();
 
-    if (result != null) console.log(result.getRepresentation());
+    if (result != null)
+    {
+      const table: { representation: string }[] = [];
+
+      for (const item of result) table.push({ representation: item.representation });
+
+      console.table(table);
+    }
+  }
+
+  private makeIf(): void
+  {
+    
   }
 
   private makeAtom(): ParserNode
@@ -61,6 +75,11 @@ export class Parser
       if (ATOMS[0].includes(this.currentToken.deepType))
       {
         node = new NumberNode(this.currentToken);
+        this.advance();
+      }
+      else if (ATOMS[1].includes(this.currentToken.deepType))
+      {
+        node = new StringNode(this.currentToken);
         this.advance();
       }
       else if (this.currentToken.deepType === TokenType.IDENTIFIER)
@@ -80,16 +99,55 @@ export class Parser
         }
         else throw new ParserError(ParserErrors.TOKEN_EXPECTED, SymbolType.RIGHT_PARENTHESES);
       }
+      else if (this.currentToken.deepType === KeywordType.IF)
+      {
+
+      }
+    }
+    console.log(this.currentToken);
+    if (!node) throw new ParserError(ParserErrors.TOKEN_EXPECTED, [...ATOMS[0], ...ATOMS[1], ...FACTORS[0], TokenType.IDENTIFIER, SymbolType.LEFT_PARENTHESES].toString());
+    
+    return node;
+  }
+
+  private makeCall(): ParserNode
+  {
+    let node: ParserNode = this.makeAtom();
+
+    if (this.currentToken && this.currentToken.deepType === SymbolType.LEFT_PARENTHESES)
+    {
+      this.advance();
+      const argumentsNodes: ParserNode[] = [];
+      
+      if (this.currentToken && this.currentToken.deepType === SymbolType.RIGHT_PARENTHESES)
+      {
+        this.advance();
+      }
+      else
+      {
+        argumentsNodes.push(this.makeExpression());
+
+        while (this.currentToken && this.currentToken.deepType === SymbolType.COMMA)
+        {
+          this.advance();
+
+          argumentsNodes.push(this.makeExpression());
+        }
+
+        if (!this.currentToken || this.currentToken.deepType !== SymbolType.RIGHT_PARENTHESES) throw new ParserError(ParserErrors.TOKEN_EXPECTED, SymbolType.RIGHT_PARENTHESES);
+      
+        this.advance();
+      }
+
+      return new CallingNode(node, argumentsNodes);
     }
 
-    if (!node) throw new ParserError(ParserErrors.TOKEN_EXPECTED, [...ATOMS[0], ...FACTORS[0], SymbolType.LEFT_PARENTHESES].toString());
-    
     return node;
   }
 
   private makePower(): ParserNode
   {
-    let node: ParserNode = this.makeAtom();
+    let node: ParserNode = this.makeCall();
     
     while (this.currentToken && this.currentToken.deepType === SymbolType.POWER)
     {
@@ -175,5 +233,38 @@ export class Parser
     }
 
     return node;
+    
+  }
+
+  public makeStatement(): ParserNode
+  {
+    const expression: ParserNode = this.makeExpression();
+
+    if (!this.currentToken || ![TokenType.END_OF_LINE, TokenType.END_OF_FILE].includes(this.currentToken.deepType))
+    {
+      throw new ParserError(ParserErrors.TOKEN_EXPECTED, [TokenType.END_OF_LINE, TokenType.END_OF_FILE].toString());
+    }
+    
+    return expression;
+  }
+
+  public makeProgram(): ParserNode[]
+  {
+    const nodes: ParserNode[] = [];
+
+    while(this.currentToken)
+    {
+      if (this.currentToken.deepType === TokenType.END_OF_FILE) break;
+
+      if (this.currentToken.deepType === TokenType.END_OF_LINE)
+      {
+        this.advance();
+        continue;
+      }
+
+      nodes.push(this.makeStatement());
+    }
+
+    return nodes;
   }
 }

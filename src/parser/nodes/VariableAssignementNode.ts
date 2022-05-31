@@ -13,8 +13,8 @@ export class VariableAssignementNode extends ParserNode
     this.node = node;
   }
 
-  public getRepresentation(): string
+  public get representation(): string
   {
-    return `VariableAssignement: (${this.variableToken.value}, ${this.node.getRepresentation()})`;
+    return `VariableAssignement: (${this.variableToken.value}, ${this.node.representation})`;
   }
 }
