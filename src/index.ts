@@ -15,11 +15,13 @@ fs.readFile(filePath, {encoding: 'utf-8'}, (err, data) => {
     const lexer: Lexer = new Lexer(data);
     const tokens: Token[] = lexer.findTokens();
     
+    console.log('Análise Léxica:');
     console.table(tokens);
 
     const parser: Parser = new Parser(tokens);
     const codeBlock: ParserNode = parser.makeCodeBlock();
 
+    console.log('Análise Sintática:');
     if (codeBlock != null) console.log(codeBlock.representation);
   } else {
     console.error(err);
