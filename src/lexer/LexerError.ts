@@ -11,7 +11,7 @@ export class LexerError
 
   public asString(): string
   {
-    return ` ${this.name}: ${this.details}`;
+    return `[LEXER] ${this.name}: ${this.details}`;
   }
 }
 

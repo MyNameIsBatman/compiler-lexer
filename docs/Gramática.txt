@@ -1,0 +1,33 @@
+bloco_codigo: LBRACE expressão* RBRACE
+
+expressão   : FUNCTION IDENTIFIER LPAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RPAREN bloco_codigo
+            : VAR|CONST IDENTIFIER EQ expressão
+            : expressão_co ((AND|OR) expressão_co)*
+
+expressão_co: NOT expressão_co
+            : expressão_ar ((IGUAL|N_IGUAL|ME_QUE|MA_QUE|ME_IG_QUE|MA_IG_QUE) expressão_ar)*
+
+expressão_ar: termo ((MAIS|MENOS) termo)*
+
+termo       : fator ((MULTIPLICAR|DIVIDIR) fator)*
+
+fator       : (MAIS|MENOS) fator
+            : power
+
+power       : call (POWER fator)*
+
+call        : atom (LPAREN (expressão (COMMA expressão)*)? RPAREN)?
+
+atom        : INT|FLOAT|STRING|IDENTIFIER
+            : LPAREN expressão RPAREN
+            : expressão_if
+            : expressão_fo
+            : expressão_wh
+
+expressão_if: IF LPAREN expressão RPAREN bloco_codigo
+                (ELSEIF LPAREN expressão RPAREN bloco_codigo)*
+                (ELSE bloco_codigo)?
+
+expressão_fo: FOR LPAREN IDENTIFIER EQ expressão TO expressão STEP expressão RPAREN bloco_codigo
+
+expressão_wh: WHILE LPAREN expressão RPAREN bloco_codigo

@@ -1,9 +1,12 @@
-import { Lexer } from "./models/Lexer";
-import { Token } from "./models/Token";
+import { ParserNode } from './parser/nodes/ParserNode';
+import { CodeBlockNode } from './parser/nodes/CodeBlockNode';
+import { Lexer } from "./lexer/Lexer";
+import { Token } from "./lexer/Token";
 import fs from 'fs';
 import path from 'path';
+import { Parser } from "./parser/Parser";
 
-const FILENAME: string = 'examples/SomaDoisNumeros.txt';
+const FILENAME: string = '_examples/ProfMedia.txt';
 
 const filePath: string = path.join(__dirname, FILENAME);
 
@@ -12,7 +15,14 @@ fs.readFile(filePath, {encoding: 'utf-8'}, (err, data) => {
     const lexer: Lexer = new Lexer(data);
     const tokens: Token[] = lexer.findTokens();
     
+    console.log('Análise Léxica:');
     console.table(tokens);
+
+    const parser: Parser = new Parser(tokens);
+    const codeBlock: ParserNode = parser.makeCodeBlock();
+
+    console.log('Análise Sintática:');
+    if (codeBlock != null) console.log(codeBlock.representation);
   } else {
     console.error(err);
   }
